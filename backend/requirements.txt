@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+python-dotenv
+pandas
+numpy
+scikit-learn
+requests
+shap
+# AI/ML
+torch --index-url https://download.pytorch.org/whl/cpu
+transformers
+einops
+sentencepiece

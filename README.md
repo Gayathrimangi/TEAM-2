@@ -1,74 +1,232 @@
-# Welcome to your Lovable project
+🌊 S.A.G.A.R
+Smart Aquatic Genomic Analysis & Research
 
-## Project info
+S.A.G.A.R is an AI-powered marine eDNA analysis platform designed to uncover hidden biodiversity in deep-ocean ecosystems by combining environmental DNA (eDNA), Generative AI–based representation learning, and intelligent machine learning algorithms for species discovery and conservation.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Problem Statement :
 
-## How can I edit this code?
+The deep ocean remains one of the least explored regions on Earth, with more than 80% still undiscovered. These ecosystems host a wide range of organisms, including novel, rare, endangered, and invasive species, yet traditional biodiversity monitoring is limited due to inaccessibility, high operational costs, and ecological sensitivity.
 
-There are several ways of editing your application.
+Environmental DNA (eDNA) allows non-invasive biodiversity monitoring by analyzing genetic material present in water and sediment samples. However, existing eDNA analysis approaches suffer from:
 
-**Use Lovable**
+Strong dependence on incomplete reference databases
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Inability to generalize to deep-sea organisms
 
-Changes made via Lovable will be committed automatically to this repo.
+Poor handling of unknown and novel species
 
-**Use your preferred IDE**
+Time-consuming and manual workflows
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Limited interpretability for conservation decision-making
 
-The only requirement is having Bun installed - [install Bun](https://bun.sh/docs/installation)
+As a result, a significant portion of marine biodiversity remains undetected.
 
-Follow these steps:
+Solution Overview
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+S.A.G.A.R addresses these challenges by integrating DNABERT-based GenAI embeddings, supervised learning for known species, and unsupervised clustering for novel species discovery, along with an AI-powered chatbot for interpretation.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Detailed Pipeline:
 
-# Step 3: Install the necessary dependencies.
-bun install
+1️. eDNA Data Collection
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-bun run dev
-```
+Input: Water and sediment samples
 
-**Edit a file directly in GitHub**
+Output: Raw FASTQ sequences
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Ensures non-invasive biodiversity monitoring.
 
-**Use GitHub Codespaces**
+2️. FASTQ Upload & Parsing
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+FASTQ parsing using Biopython
 
-## What technologies are used for this project?
+Why used: Efficient extraction of DNA reads without information loss.
 
-This project is built with:
+3️. DNA Sequence Representation
 
-- Bun 1.3.4
-- Vite 7.2.7
-- TypeScript
-- React 19.2.1
-- shadcn-ui
-- Tailwind CSS
+here we do
 
-## How can I deploy this project?
+k-mer tokenization (k = 6)
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Optional reverse-complement augmentation
 
-## Can I connect a custom domain to my Lovable project?
+Why used:
 
-Yes, you can!
+Preserves local genomic signatures
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Alignment-free and scalable
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Matches DNABERT’s pretraining assumptions
+
+4️. GenAI-Based DNA Representation Learning
+
+Core Algorithm:
+
+DNABERT (Transformer-based DNA Language Model)
+
+Why used:
+
+Learns contextual patterns in DNA sequences
+
+Captures evolutionary and functional signals
+
+Generates dense embeddings even for unknown organisms
+
+Reduces dependence on reference databases
+
+Role in S.A.G.A.R:
+DNABERT is used only for feature extraction, not classification.
+
+5️. Known Species Discovery
+
+Algorithm Used:
+
+RandomForestClassifier (Supervised Learning)
+
+Why Random Forest?
+
+Handles high-dimensional DNABERT embeddings effectively
+
+Robust to noise common in eDNA data
+
+Works well with limited and imbalanced training data
+
+Provides feature importance and interpretability
+
+Reduces overfitting compared to deep classifiers
+
+Output:
+
+Known species label
+
+Confidence score (probability estimate)
+
+6️. Unknown Species Discovery
+
+Algorithm Used:
+
+HDBSCAN (Hierarchical Density-Based Spatial Clustering)
+
+Why HDBSCAN?
+
+Does not require predefining number of clusters
+
+Automatically identifies noise and outliers
+
+Ideal for biological data with uneven density
+
+Discovers natural groupings corresponding to potential novel species
+
+Output:
+
+Clusters of unknown genetic sequences
+
+Each cluster represents a candidate novel species or lineage
+
+7️. Endangered Species Detection
+
+Algorithms Used:
+
+Relative abundance estimation
+
+Low-frequency statistical filtering
+
+Why used: Rare but consistent detections may indicate endangered species, enabling conservation prioritization.
+
+8️. Invasive Species Detection
+
+Algorithms Used:
+
+Temporal abundance change detection
+
+Spatial distribution comparison
+
+Why used: Sudden appearance or rapid growth patterns signal potential invasiveness.
+
+9️. Biodiversity Metrics & Ecosystem Insights
+
+Algorithms Used:
+
+Species richness estimation
+
+Shannon and Simpson diversity indices
+
+Why used: Provides quantitative ecosystem health indicators for scientists and policymakers.
+
+AI Chatbot for Explanation & Decision Support
+Important: The chatbot does not analyze DNA.
+
+Algorithms Used:
+
+Large Language Models (LLMs)
+
+Intent detection
+
+Context-grounded prompt engineering
+
+Why used:
+
+Translates complex AI outputs into human-understandable insights
+
+Answers general questions and result-specific queries
+
+Prevents hallucinations by grounding responses in analysis outputs
+
+Chatbot LLM Natural language explanation & assistance
+
+DNABERT and the chatbot are independent GenAI systems, each serving a different purpose.
+
+Technology Stack
+
+AI & ML
+
+DNABERT (Transformer-based DNA Language Model)
+
+RandomForestClassifier (known species)
+
+HDBSCAN (unknown species)
+
+Scikit-learn
+
+PyTorch
+
+Bioinformatics
+
+Biopython
+
+FASTQ / FASTA processing
+
+k-mer encoding
+
+Backend
+
+FastAPI
+
+Uvicorn
+
+Python
+
+Frontend
+
+HTML / CSS / JavaScript / Bootstrap (production UI)
+
+Chatbot
+
+LLM (OpenAI / Gemini)
+
+Prompt engineering
+
+Context injection
+
+Final Outcome:
+
+By combining DNABERT-based GenAI embeddings, RandomForest classification, HDBSCAN-based novel species discovery, and an AI-powered explanation assistant, S.A.G.A.R enables:
+
+Accurate identification of known marine species
+
+Discovery of previously unrecorded deep-sea organisms
+
+Early detection of endangered and invasive species
+
+Reduced dependence on reference databases
+
+Faster, scalable, and interpretable biodiversity analysis
